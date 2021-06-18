@@ -19,8 +19,6 @@
 (require 'init-mine-undo-tree)
 
 ;; org配置文件
-(require 'org-install)
-(require 'ob-tangle)
 (org-babel-load-file (concat lisp-path "init-mine-org.org"))
 
 ;; 关闭备份文件
@@ -46,5 +44,4 @@
 (global-set-key (kbd "C-h v") 'find-variable-at-point)
 (global-set-key (kbd "C-h C-k") 'find-function-on-key)
 (global-set-key (kbd "C-h k") 'describe-key)
-
 (provide 'init-mine)

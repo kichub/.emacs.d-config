@@ -4,6 +4,7 @@
 
 (depends-on "abc-mode")
 (depends-on "ag")
+(depends-on "aggressive-indent")
 (depends-on "alert")
 (depends-on "anaconda-mode" "0.1.1")
 (depends-on "ansi")

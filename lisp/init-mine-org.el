@@ -181,51 +181,6 @@
   :config
   (global-git-gutter-mode))
 
-
-
-
-(use-package smerge-mode
-  :after hydra
-  :config
-  (defhydra unpackaged/smerge-hydra
-    (:color pink :hint nil :post (smerge-auto-leave))
-    "
-^Move^       ^Keep^               ^Diff^                 ^Other^
-^^-----------^^-------------------^^---------------------^^-------
-_n_ext       _b_ase               _<_: upper/base        _C_ombine
-_p_rev       _u_pper              _=_: upper/lower       _r_esolve
-^^           _l_ower              _>_: base/lower        _k_ill current
-^^           _a_ll                _R_efine
-^^           _RET_: current       _E_diff
-p"
-    ("n" smerge-next)
-    ("p" smerge-prev)
-    ("b" smerge-keep-base)
-    ("u" smerge-keep-upper)
-    ("l" smerge-keep-lower)
-    ("a" smerge-keep-all)
-    ("RET" smerge-keep-current)
-    ("\C-m" smerge-keep-current)
-    ("<" smerge-diff-base-upper)
-    ("=" smerge-diff-upper-lower)
-    (">" smerge-diff-base-lower)
-    ("R" smerge-refine)
-    ("E" smerge-ediff)
-    ("C" smerge-combine-with-next)
-    ("r" smerge-resolve)
-    ("k" smerge-kill-current)
-    ("ZZ" (lambda ()
-            (interactive)
-            (save-buffer)
-            (bury-buffer))
-     "Save and bury buffer" :color blue)
-    ("q" nil "cancel" :color blue))
-  :hook (magit-diff-visit-file . (lambda ()
-                                   (when smerge-mode
-                                     (unpackaged/smerge-hydra/body)))))
-
-
-
 (use-package forge
   :ensure t)
 
@@ -233,7 +188,6 @@ p"
   :ensure t
   :config
   (require 'smartparens-config)
-
   (add-hook 'minibuffer-setup-hook 'turn-on-smartparens-strict-mode)
   ;; pair management
   (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
@@ -242,15 +196,34 @@ p"
 
 (use-package rainbow-delimiters
   :ensure t
-  :config
+  :init
   (rainbow-delimiters-mode)
+  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+  (add-hook 'org-mode-hook #'rainbow-delimiters-mode)
   )
 
 (show-paren-mode t)
 
-(use-package recentf
+(use-package which-key
   :ensure t
   :config
-  (recentf-mode 1)
-  (setq recentf-max-menu-item 999)
+  (which-key-mode)
+  )
+
+(setq-default cursor-type 'bar)
+
+(rainbow-delimiters-mode)
+(setq-default left-margin-width 15 right-margin-width 8)
+(setq tramp-ssh-controlmaster-options
+      "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
+(desktop-save-mode 1)
+(savehist-mode 1)
+(add-to-list 'savehist-additional-variables 'kill-ring)
+
+(use-package aggressive-indent 
+  :ensure t
+  :config
+  (global-aggressive-indent-mode 1)
+  (add-to-list 'aggressive-indent-excluded-modes 'html-mode)
   )
